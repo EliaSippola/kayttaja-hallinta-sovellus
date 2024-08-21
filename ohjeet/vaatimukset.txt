@@ -1,0 +1,12 @@
+Asiakkaan vaatimukset:
+
+Asiakas haluaa WEB-pohjaisen käyttäjienhallintajärjestelmän.
+Asiakas haluaa että järjestelmä toteutetaan Reactilla ja Nodella
+
+Tietokannaksi asiakas haluaa MongoDB tietokannan
+
+käyttäjähallinnassa tulee olla Create, Read, Update ja Delete toiminnot. (CRUD)
+
+Asiakkaalla on vain yksi vaatimus sivuston muotoilusta; Sivuston tulee olla selkeästi luettavissa.
+
+Asiakas haluaa että sovellus julkaistaan AWS Elastick beanstalk -ympäristössä.
