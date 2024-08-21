@@ -18,7 +18,7 @@ Backend will now be working in browser
 
 1. open cmd / powershell at frontend folder
 2. run `npm install`
-3. run `npm start`
+3. run `npm run start`
 
 Frontend will be open at `localhost:3000`
 
