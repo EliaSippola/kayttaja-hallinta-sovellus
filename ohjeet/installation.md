@@ -5,8 +5,12 @@
 1. open cmd / powershell at backend folder
 2. run `npm install`
 3. create `.env`
-```properties
+```ini
+# port to open backend on
 PORT = 3000
+
+# url to connect to MongoDB
+MONGODB_URI = '<mongodb_url>'
 ```
 4. run `node app.js`
 
@@ -32,7 +36,8 @@ Run backend server to see results
 
 If you want to create `/build` straight at backend do:
 1. create `.env` file at frontend
-```properties
+```ini
+# path to backend/build folder
 BUILD_PATH= '../backend/build'
 ```
 2. Run as normal
