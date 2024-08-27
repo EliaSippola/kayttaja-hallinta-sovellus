@@ -4,15 +4,15 @@ const mong = require('mongoose');
 // contains Id, Name, Password and Bio
 const userSchema = new mong.Schema({
     name: {
-        type: mong.Types.String,
+        type: String,
         required: true
     },
     password: {
-        type: mong.Types.String,
+        type: String,
         required: true
     },
     bio: {
-        type: mong.Types.String,
+        type: String,
         required: false
     }
 });

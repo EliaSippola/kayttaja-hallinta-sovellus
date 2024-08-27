@@ -16,9 +16,14 @@ exports.getAll = async (req, res) => {
 
 // get one user
 exports.getOne = async (req, res) => {
-    
+
     try {
-        const id = req.query.id;
+        const id = req.params.id;
+
+        if (id == null) {
+            req.status(400).send("No id specified");
+            return;
+        }
 
         const users = await User.find({'_id':id});
         res.json(user);
@@ -53,14 +58,13 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
 
     try {
-        const id = req.query.id;
 
-        // status 400 (request error) id missing
+        const id = req.params.id;
+
         if (id == null) {
-            res.status(400).send('id is missing');
+            req.status(400).send("No id specified");
             return;
         }
-
 
         const users = await User.find({"_id":id});
 
@@ -98,10 +102,10 @@ exports.delete = async () => {
 
     try {
 
-        const id = req.query.id;
+        const id = req.params.id;
 
         if (id == null) {
-            res.status(400).send('id is missing');
+            req.status(400).send("No id specified");
             return;
         }
 
