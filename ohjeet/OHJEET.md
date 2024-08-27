@@ -36,6 +36,17 @@ Jos ei ole mitään tekemistä, keksitään tekemistä.
 
 Create your feature / fix
 
+### Saving to GitHub
+
+1. Commit changes with `git add .`, `git commit -m "<message>"`
+2. run `git push`
+
+If you can't push because you don't have upstream:
+
+run `git push --set-upstream origin <name>`
+
+Branch is now in github
+
 ### Merging
 
 1. Commit changes with `git add .`, `git commit -m "<message>"` and `git push`

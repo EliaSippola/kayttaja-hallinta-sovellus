@@ -10,3 +10,5 @@ käyttäjähallinnassa tulee olla Create, Read, Update ja Delete toiminnot. (CRU
 Asiakkaalla on vain yksi vaatimus sivuston muotoilusta; Sivuston tulee olla selkeästi luettavissa.
 
 Asiakas haluaa että sovellus julkaistaan AWS Elastick beanstalk -ympäristössä.
+
+Asiakas haluaa, että käyttäjillä on myös Bio, eli lyhy kuvaus itsestään.
