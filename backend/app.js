@@ -1,15 +1,21 @@
 const exp = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
+const conn = require('./config/db_config');
 
 // config
 dotenv.config();
+
+// connect to db
+conn();
 
 // ports from .env
 const PORT = process.env.PORT || 3000;
 
 // app
 const app = exp();
+
+app.use(exp.json());
 
 // backend
 // get routes

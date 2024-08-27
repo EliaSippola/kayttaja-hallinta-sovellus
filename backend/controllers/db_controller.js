@@ -26,11 +26,11 @@ exports.getOne = async (req, res) => {
         }
 
         const users = await User.find({'_id':id});
-        res.json(user);
+        res.json(users);
 
         res.status(200).end();
     } catch (err) {
-        res.status(500).send('Server Error');
+        res.status(500).send("Server Error");
     }
 
 }
@@ -42,14 +42,13 @@ exports.create = async (req, res) => {
         let user = new User;
         user.name = req.body.name;
         user.password = req.body.password;
+        user.bio = req.body.bio != null ? req.body.bio : '';
 
         await User.insertMany(user);
 
-        console.log("Created user");
-
         res.status(200).end();
     } catch (err) {
-        res.status(500).send('Server Error');
+        res.status(500).send("Server Error");
     }
 
 }
@@ -86,19 +85,17 @@ exports.update = async (req, res) => {
             bio = '';
         }
 
-        await User.updateOne({"_id":users._id}, {$set:{"name":name, "bio":bio}});
-
-        console.log("Updated user");
+        await User.updateOne({"_id": id}, {$set:{"name":name, "bio":bio}});
 
         res.status(200).end();
     } catch (err) {
-        res.status(500).send("Server Error");
+        res.status(500).send("Server Error: " + err.message);
     }
 
 }
 
 // delete user
-exports.delete = async () => {
+exports.delete = async (req, res) => {
 
     try {
 
@@ -114,16 +111,14 @@ exports.delete = async () => {
         // status 200 (not found, delete succesful)
         if (!users) {
             res.status(200).end();
-            console.log("Deleted empty set");
             return;
         }
 
-        await User.deleteOne({"_id":users._id});
+        await User.deleteOne({"_id":id});
 
-        console.log("Deleted user");
         res.status(200).end();
     } catch (err) {
-        res.status(500).send("Server Error");
+        res.status(500).send('Server Error: ' + err.message);
     }
 
 }
