@@ -2,6 +2,11 @@
 
 ## Backend
 
+Make sure you have MongoDB database ready to connect to the backend.
+
+Use MongoDB URL to connect to it. The syntax is:
+`mongodb+srv://<username>:<password>@<host>/<database>?<options>`
+
 1. open cmd / powershell at backend folder
 2. run `npm install`
 3. create `.env`
@@ -10,6 +15,7 @@
 PORT = 3000
 
 # url to connect to MongoDB
+# syntax: mongodb+srv://<username>:<password>@<host>/<database>?<options>
 MONGODB_URI = '<mongodb_url>'
 ```
 4. run `node app.js`

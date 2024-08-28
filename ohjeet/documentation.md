@@ -20,7 +20,7 @@ BaseUrl is `/api/users`.
 The api supports GET, POST, PUT and DELETE requests (CRUD).
 
 The id will be specified with `../:id` end.
-put the id to the end like this `../api/users/1` when id is 1.
+put the id to the end like this `../api/users/123456789` when id is `123456789`.
 
 ```JavaScript
 // api calls

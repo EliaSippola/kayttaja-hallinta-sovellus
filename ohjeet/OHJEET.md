@@ -53,5 +53,5 @@ Branch is now in github
 2. run `git checkout main` to move to main branch
 3. run `git merge <name>` to merge branch to main
 4. Fix possible conflicts
-5. Delete branch if it's not used anymore using `git branch -d <name>`
+5. Delete branch if it's not used anymore using `git branch -d <name>`. Run also `git push origin --delete <name>` to delete branch from GitHub
 6. Push changes with `git push`

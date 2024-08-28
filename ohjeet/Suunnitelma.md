@@ -3,12 +3,13 @@
 ### Elia:
 
 API
-API toiminnot (CRUD)
+API toiminnot (CRUD) - Valmis
+MongoDB connection - Valmis
 
 ### Onni:
 
-Backend luonti, Frontend
-Sivuston ohjaaminen oikeisiin paikkoihin
+Frontend luonti - Valmis
+Sivuston ohjaaminen oikeisiin paikkoihin - Valmis
 
 ### Joose
 
