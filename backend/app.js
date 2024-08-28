@@ -2,6 +2,7 @@ const exp = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
 const conn = require('./config/db_config');
+const cors = require('cors');
 
 // config
 dotenv.config();
@@ -16,6 +17,7 @@ const PORT = process.env.PORT || 3000;
 const app = exp();
 
 app.use(exp.json());
+app.use(cors());
 
 // backend
 // get routes
