@@ -1,6 +1,8 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link ,Routes} from 'react-router-dom';
+//import { BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'; Switchiä ei voi käyttää, koska se on vanhentunut. Sen sijaan käytetään Routesia.
+import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
+
 // Tuodaan kaikki komponentit sovellukseen
 import Register from './components/Register';
 import Login from './components/Login';
