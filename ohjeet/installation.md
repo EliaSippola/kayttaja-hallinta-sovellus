@@ -49,3 +49,7 @@ BUILD_PATH= '../backend/build'
 2. Run as normal
 
 **The folder at destination will be overwritten**
+
+
+### Installing to AWS
+

@@ -1,11 +1,14 @@
 ## Onni
 
-- frontending yhdistäminen backendiin
+- frontend react-app [DONE]
+- frontendin yhdistäminen backendiin
 
 ## Joose
 
-- frontend react-app (https://opi.riveria.fi/moodle/mod/resource/view.php?id=196073)
+- Rekisteröinti sivu (apin kanssa)
+- CSS
 
 ## Elia
 
 - backend api to MongoDB
+- elastick beanstalk testing and env vars
