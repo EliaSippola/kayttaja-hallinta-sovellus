@@ -1,5 +1,7 @@
 // src/components/Register.js
 import React, { useState } from 'react';
+import axios from 'axios';
+
 
 // Register-komponentti käsittelee käyttäjän rekisteröinnin
 function Register() {
@@ -16,12 +18,25 @@ function Register() {
     // handleSubmit-funktio käsittelee lomakkeen lähetyksen
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        // Tulostetaan rekisteröityneen käyttäjän tiedot konsoliin
-        console.log('Käyttäjä rekisteröitynyt:', user);
-        // Näytetään ilmoitus onnistuneesta rekisteröinnistä
-        alert('Käyttäjä rekisteröityi onnistuneesti');
+    
+    if (user.username && user.password && user.bio) {
+    e.preventDefault()
+    axios.post(`http://localhost:3000/api/users`, {
+    "name": user.username,
+    "password": user.password,
+    "bio": user.bio,
+    })
+    .then((response) => console.log(response))
+    .catch((err) => console.log(err));
+    alert('Käyttäjä rekisteröityi onnistuneesti');
+    }
+
+    else {
+        alert('Olet jättänyt kentän tyhjäksi');
+    }
     };
+
+
     // Lomakkeen renderöinti
     return (
         <div>
