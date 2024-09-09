@@ -113,7 +113,12 @@ Varmista että mitään virheitä ei tule.
 
 lähteitä:
 https://www.linode.com/docs/guides/getting-started-with-nginx-part-3-enable-tls-for-https/
-
+https://www.cyberciti.biz/faq/configure-nginx-to-use-only-tls-1-2-and-1-3/
+https://medium.com/@sonumishra19091999/deploying-a-node-js-app-on-ubuntu-with-nginx-8b6999c37775
+https://www.codewithharry.com/blogpost/deploy-nodejs-app-on-ubuntu/
+https://www.linode.com/docs/guides/create-a-self-signed-tls-certificate-ubuntu-18-04/
+https://docs.aws.amazon.com/linux/al2023/ug/SSL-on-amazon-linux-2023.html
+https://docs.aws.amazon.com/linux/al2023/ug/ec2-lamp-amazon-linux-2023.html
 
 letsencrypt
 https://letsencrypt.org/getting-started/
