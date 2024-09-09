@@ -107,4 +107,13 @@ server {
 
 ```
 
-5. 
+5. Käynnistä nginx uudelleen komennolla `sudo service nginx restart`
+
+Varmista että mitään virheitä ei tule.
+
+lähteitä:
+https://www.linode.com/docs/guides/getting-started-with-nginx-part-3-enable-tls-for-https/
+
+
+letsencrypt
+https://letsencrypt.org/getting-started/
