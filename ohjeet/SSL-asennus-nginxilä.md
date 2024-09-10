@@ -73,6 +73,7 @@ server {
         listen 80 default_server;
         listen [::]:80 default_server;
 
+        # nämä rivit tulee asettaa jotta https toimii
         listen 443 ssl default_server;
         listen [::]:443 ssl default_server;
         server_name <sivuston osoite>; # aseta sivuston osoite tähän
