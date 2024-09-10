@@ -1,11 +1,3 @@
-install nginx
-
-create certs
-
-modify /etc/nginx/nginx.conf
-modify /etc/nginx/conf.d/<server>.conf
-modify /etc/nginx/sites-available/default
-
 # HTTPS protokollan käyttö NGINX palvelimella
 
 Ohje kertoo miten luodaan oma SSL sertifikaatti, ja miten saadaan NodeJS palvelimeen yhteys Nginx reverse proxylla HTTPS:n kautta.
