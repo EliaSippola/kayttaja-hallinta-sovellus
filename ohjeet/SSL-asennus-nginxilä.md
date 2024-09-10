@@ -82,7 +82,27 @@ server {
 }
 ```
 
-4. Käynnistä nginx uudelleen komennolla `sudo service nginx restart`
+4. Konfigurodaan `/etc/nginx/sites-available/default`
+
+Jos haluat sulkea nginxin automaattiset sivut, tai käyttää http yhteyksiä, täytyy seuraava vaihe tehdä.
+
+muokkaa tiedostoa:
+
+```conf
+
+# muokataan kohtaa
+server {
+
+    # asetetaan kohdat 'listen 80 default_server' ja 'listen [::]:443 ssl default_server; kommentteihin
+    #listen 80 default_server;
+    #listen [::]:80 default_server;
+}
+
+```
+
+Tällä tavalla varmistetaan että mikään (muu kuin oma sivu) ei käytä porttia 80.
+
+5. Käynnistä nginx uudelleen komennolla `sudo service nginx restart`
 
 Varmista että mitään virheitä ei tule.
 
