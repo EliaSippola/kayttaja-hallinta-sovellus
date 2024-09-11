@@ -122,3 +122,19 @@ exports.delete = async (req, res) => {
     }
 
 }
+
+exports.login = async (req, res) => {
+    const { username, password } = req.body;
+    console.log(req.body);
+    
+    // Etsi käyttäjä tietokannasta
+    const user = await User.findOne({"name":username });
+
+    // Tarkista, että käyttäjä löytyy ja salasana on oikein
+    if (user && user.password === password) {
+        // Voit myös käyttää salasanan hashauksen tarkistusta, jos se on käytössä
+        res.status(200).json({ message: 'Kirjautuminen onnistui' });
+    } else {
+        res.status(401).json({ message: 'Virheellinen käyttäjänimi tai salasana' });
+    }
+};
