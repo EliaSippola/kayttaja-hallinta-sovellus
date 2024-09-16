@@ -23,7 +23,7 @@ function Login() {
         e.preventDefault()
 
 
-        try{
+        //try{
             const response = await fetch('http://localhost:3000/api/users/login', {
                 method: 'POST',
                 headers: {
@@ -36,12 +36,12 @@ function Login() {
                 // Jos kirjautuminen onnistui, ohjataan palvelut sivulle
                 navigate('/palvelut');
             } else {
-                throw new Error('Kirjautuminen epäonnistui')
+                //throw new Error('Kirjautuminen epäonnistui')
+                setError('Kirjautuminen epäonnistui');
             }
-
-        } catch (err) {
-            setError(err.message);
-        }
+        // } catch (err) {
+        //     setError(err.message);
+        // }
 };
 
     // Lomakkeen renderöinti
@@ -79,6 +79,8 @@ function Login() {
                 {/* Kirjautumis painike */}
                 <button type="submit">Kirjaudu</button>
             </form>
+
+            <div>{error}</div>
         </div>
     );
 }

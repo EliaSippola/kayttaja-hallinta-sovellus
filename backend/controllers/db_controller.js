@@ -125,7 +125,6 @@ exports.delete = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { username, password } = req.body;
-    console.log(req.body);
     
     // Etsi käyttäjä tietokannasta
     const user = await User.findOne({"name":username });
