@@ -48,4 +48,12 @@ body = {
 
 // Delete user
 DELETE 'http://localhost:3000/api/user/:id'
+
+
+//Login
+POST 'http://localhost:3000/api/users/login'
+body = {
+    'name': name,
+    'password': pass
+}
 ```
