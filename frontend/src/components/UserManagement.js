@@ -1,13 +1,11 @@
 // src/components/UserManagement.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 
 // UserManagement-komponentti hoitaa käyttäjien hallinnan ja CRUD-toiminnot
 function UserManagement() {
     // useState hook luo tilan käyttäjille ja uudelle käyttäjälle
-    const [users, setUsers] = useState([]);
-    const [newUser, setNewUser] = useState({ username: '', bio: '' });
+    const [newUser, setNewUser] = useState({ name: '', bio: '' , password: ''});
     const [editingUser, setEditingUser] = useState(null);
 
 // // useEffect hook suorittaa koodin, kun komponentti ladataan
@@ -20,7 +18,7 @@ function UserManagement() {
 //     }, []);
 
 //API-kutsu lista käyttäjistä
-const [User, setUser] = useState([]);
+const [users, setUsers] = useState([]);
 
     useEffect(() => {
         kayttajat()
@@ -29,7 +27,7 @@ const [User, setUser] = useState([]);
     const kayttajat = async () => {
     const response = await fetch(`http://localhost:3000/api/users`);
 
-    setUser(await response.json())
+    setUsers(await response.json())
     }
 
 
@@ -37,33 +35,114 @@ const [User, setUser] = useState([]);
     const handleChange = (e) => {
         setNewUser({
             ...newUser,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
     };
+
+    // handleEdit-funktio asettaa käyttäjän muokkaustilaan
+    const handleEdit = (user) => {
+        setEditingUser(user);
+        setNewUser({ name: user.name, bio: user.bio , _id: user._id});
+    };
+    
     // handleSubmit-funktio käsittelee lomakkeen lähetyksen
     const handleSubmit = (e) => {
         e.preventDefault();
         if (editingUser) {
+
+            // send request
+            fetch(`http://localhost:3000/api/users/${editingUser._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: newUser.name,
+                    password: newUser.password,
+                    bio: newUser.bio
+                })
+            }).then((res) => {
+                if (!res.ok) {
+                    alert('Yhteys tietokantaan epäonnistui!');
+                    return
+                }
+            });
+
             // Jos ollaan muokkaustilassa, päivitetään olemassa oleva käyttäjä 
-            setUsers(users.map(user => (user.username === editingUser.username ? newUser : user)));
+            setUsers(users.map(user => (user._id === editingUser._id ? newUser : user)));
             setEditingUser(null);
+
         } else {
-            // Muussa tapauksessa lisätään uusi käyttäjä
-            setUsers([...users, newUser]);
+
+            if (newUser.name && newUser.password && newUser.bio) {
+                e.preventDefault()
+            
+                    // create api request to check if username exists
+                    fetch('http://localhost:3000/api/users/exists', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "username": newUser.name
+                        })
+                    // then check if response is 200, and get response body
+                    }).then((res) => {
+                        if (!res.ok) {
+                            alert('Issue with server connection');
+                            return;
+                        }
+                        // check if name exists, if not, create account
+                        res.json().then((res) => {
+                            if (res.exists) {
+                                alert('Nimi on jo käytössä');
+                            } else {
+                                fetch(`http://localhost:3000/api/users`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        name: newUser.name,
+                                        password: newUser.password,
+                                        bio: newUser.bio
+                                    })})
+                                    .then((response) => console.log(response.data))
+                                    .catch((err) => console.log(err));
+
+                                alert('Käyttäjä rekisteröityi onnistuneesti');
+                                // Muussa tapauksessa lisätään uusi käyttäjä
+                                setUsers([...users, newUser]);
+                            }
+                        })
+                    });
+
+                } else {
+                    alert('Olet jättänyt kentän tyhjäksi');
+                }
         }
         // Tyhjennetään lomake
-        setNewUser({ username: '', bio: '' });
-    };
-
-// handleEdit-funktio asettaa käyttäjän muokkaustilaan
-    const handleEdit = (user) => {
-        setEditingUser(user);
-        setNewUser({ username: user.username, bio: user.bio });
+        setNewUser({ name: '', bio: '' , password: ''});
     };
 
     // handleDelete-funktio poistaa käyttäjän listasta
-    const handleDelete = (username) => {
-        setUsers(users.filter(user => user.username !== username));
+    const handleDelete = (deletedUser) => {
+
+        // send request
+        fetch(`http://localhost:3000/api/users/${deletedUser._id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            if (!res.ok) {
+                alert('Yhteys tietokantaan epäonnistui!');
+                return
+            }
+        });
+
+        setUsers(users.filter(user => user._id !== deletedUser._id));
+
     };
 
     // Komponentin renderöinti
@@ -77,13 +156,25 @@ const [User, setUser] = useState([]);
                     {/* Tekstikenttä, joka päivittää username-tilan ja estää muokkaamisen päivitystilan aikana */}
                     <input
                         type="text"
-                        name="username"
-                        value={newUser.username}
+                        name="name"
+                        value={newUser.name}
                         onChange={handleChange}
                         disabled={!!editingUser}
                     />
                 </label>
-                <br />
+                <br/>
+                <label>
+                Salasana:
+                    {/* Salasanojen syöttökenttä, joka päivittää password-tilan */}
+                    <input
+                        type="password"
+                        name="password"
+                        value={newUser.password}
+                        onChange={handleChange}
+                        disabled={!!editingUser}
+                    />
+                </label>
+                <br/>
                 <label>
 Bio:
                     {/* Tekstialue, joka päivittää bio-tilan */}
@@ -100,14 +191,14 @@ Bio:
             <h2>Käyttäjäluettelo</h2>
             {/* Käyttäjälistan renderöinti */}
             <ul>
-                {User.map(user => (
-                    <li key={User.id}>
+                {users.map(user => (
+                    <li key={user._id}>
                         {user.name}: {user.bio}
                         <br></br>
                         {/* Edit-painike, joka mahdollistaa käyttäjän muokkaamisen */}
                         <button onClick={() => handleEdit(user)}>Muokkaa</button>
                         {/* Delete-painike, joka poistaa käyttäjän */}
-                        <button onClick={() => handleDelete(user.username)}>Poista</button>
+                        <button onClick={() => handleDelete(user)}>Poista</button>
                     </li>
                 ))}
             </ul>
