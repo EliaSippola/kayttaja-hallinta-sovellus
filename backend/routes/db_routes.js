@@ -16,7 +16,10 @@ router.put('/:id', dbController.update);
 // delete user
 router.delete('/:id', dbController.delete);
 
-//login
+// login
 router.post('/login', dbController.login);
+
+// check if name exists
+router.post('/exists', dbController.userExists);
 
 module.exports = router;

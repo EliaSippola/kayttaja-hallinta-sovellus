@@ -123,6 +123,7 @@ exports.delete = async (req, res) => {
 
 }
 
+// check if name and pass is right
 exports.login = async (req, res) => {
     const { username, password } = req.body;
     
@@ -137,3 +138,21 @@ exports.login = async (req, res) => {
         res.status(401).json({ message: 'Virheellinen käyttäjänimi tai salasana' });
     }
 };
+
+
+// check if name exists
+exports.userExists = async (req, res) => {
+
+    const { username } = req.body;
+
+    // katso löytyykö käyttäjä
+    const user = await User.findOne({"name":username});
+
+    // send response back
+    if (user) {
+        res.status(200).json({ exists: true });
+    } else {
+        res.status(200).json({ exists: false })
+    }
+
+}
