@@ -8,28 +8,26 @@ function UserManagement() {
     const [newUser, setNewUser] = useState({ name: '', bio: '' , password: ''});
     const [editingUser, setEditingUser] = useState(null);
 
-// // useEffect hook suorittaa koodin, kun komponentti ladataan
-//     useEffect(() => {
-//     //     // Alustava käyttäjädata (voisi olla API-kutsu lopullisessa sovelluksessa)
-//         setUsers([
-//             // { username: 'Jouni React', bio: 'Tämä on Jounin henkilökohtainen kuvaus (bio).'}, 
-//             // { username: 'Jaana React', bio: 'Tämä on Jaanan henkilökohtainen kuvaus (bio).' }
-//         ]);
-//     }, []);
 
-//API-kutsu lista käyttäjistä
-const [users, setUsers] = useState([]);
+    //API-kutsu lista käyttäjistä
+    const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        kayttajat()
-    }, [])
-    
     const kayttajat = async () => {
-    const response = await fetch(`http://localhost:3000/api/users`);
+        const response = await fetch(`http://localhost:3000/api/users`);
 
-    setUsers(await response.json())
+        setUsers(await response.json())
     }
 
+    useEffect(() => {
+        kayttajat();
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            kayttajat();
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [])
 
     // handleChange-funktio päivittää tilan, kun käyttäjä muuttaa lomakkeen kenttää
     const handleChange = (e) => {
@@ -190,18 +188,22 @@ Bio:
             </form>
             <h2>Käyttäjäluettelo</h2>
             {/* Käyttäjälistan renderöinti */}
-            <ul>
-                {users.map(user => (
-                    <li key={user._id}>
-                        {user.name}: {user.bio}
-                        <br></br>
-                        {/* Edit-painike, joka mahdollistaa käyttäjän muokkaamisen */}
-                        <button onClick={() => handleEdit(user)}>Muokkaa</button>
-                        {/* Delete-painike, joka poistaa käyttäjän */}
-                        <button onClick={() => handleDelete(user)}>Poista</button>
-                    </li>
-                ))}
-            </ul>
+                {users.length < 1 ? 
+                    <div>Loading...</div>
+                    :
+                    <ul>
+                        {users.map(user => (
+                        <li key={user._id}>
+                            {user.name}: {user.bio}
+                            <br></br>
+                            {/* Edit-painike, joka mahdollistaa käyttäjän muokkaamisen */}
+                            <button onClick={() => handleEdit(user)}>Muokkaa</button>
+                            {/* Delete-painike, joka poistaa käyttäjän */}
+                            <button onClick={() => handleDelete(user)}>Poista</button>
+                        </li>
+                        ))}
+                    </ul>   
+                }
         </div>
     );
 }
