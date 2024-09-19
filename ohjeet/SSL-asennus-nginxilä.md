@@ -120,5 +120,11 @@ https://www.linode.com/docs/guides/create-a-self-signed-tls-certificate-ubuntu-1
 https://docs.aws.amazon.com/linux/al2023/ug/SSL-on-amazon-linux-2023.html
 https://docs.aws.amazon.com/linux/al2023/ug/ec2-lamp-amazon-linux-2023.html
 
+## Oikean sertifikaatin saaminen
+
+**Voit hankkia oikean sertifikaatin vain jos sinulla on oma domain**
+
+Esimerkiksi aws:n domainit ovat blacklistattuja letsencryptissä, ja sinun pitäisi käyttää omaa domainia.
+
 letsencrypt
 https://letsencrypt.org/getting-started/
