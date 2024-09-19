@@ -1,5 +1,7 @@
 // src/components/Register.js
 import React, { useState } from 'react';
+import axios from 'axios';
+
 
 // Register-komponentti käsittelee käyttäjän rekisteröinnin
 function Register() {
@@ -16,12 +18,48 @@ function Register() {
     // handleSubmit-funktio käsittelee lomakkeen lähetyksen
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        // Tulostetaan rekisteröityneen käyttäjän tiedot konsoliin
-        console.log('Käyttäjä rekisteröitynyt:', user);
-        // Näytetään ilmoitus onnistuneesta rekisteröinnistä
-        alert('Käyttäjä rekisteröityi onnistuneesti');
+
+    if (user.username && user.password && user.bio) {
+    e.preventDefault()
+
+        // create api request to check if username exists
+        fetch('http://localhost:3000/api/users/exists', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "username": user.username
+            })
+        // then check if response is 200, and get response body
+        }).then((res) => {
+            if (!res.ok) {
+                alert('Issue with server connection');
+                return;
+            }
+            // check if name exists, if not, create account
+            res.json().then((res) => {
+                if (res.exists) {
+                    alert('Nimi on jo käytössä');
+                } else {
+                    axios.post(`http://localhost:3000/api/users`, {
+                        "name": user.username,
+                        "password": user.password,
+                        "bio": user.bio,
+                        })
+                        .then((response) => console.log(response.data))
+                        .catch((err) => console.log(err));
+                        alert('Käyttäjä rekisteröityi onnistuneesti');
+                }
+            })
+        });
+
+    } else {
+        alert('Olet jättänyt kentän tyhjäksi');
+    }
     };
+
+
     // Lomakkeen renderöinti
     return (
         <div>

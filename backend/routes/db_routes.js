@@ -5,7 +5,7 @@ const dbController = require('../controllers/db_controller.js');
 // get all users
 router.get('/', dbController.getAll);
 
-router.get('/:id', dbController.getOne)
+router.get('/:id', dbController.getOne);
 
 // post user
 router.post('/', dbController.create);
@@ -15,5 +15,11 @@ router.put('/:id', dbController.update);
 
 // delete user
 router.delete('/:id', dbController.delete);
+
+// login
+router.post('/login', dbController.login);
+
+// check if name exists
+router.post('/exists', dbController.userExists);
 
 module.exports = router;

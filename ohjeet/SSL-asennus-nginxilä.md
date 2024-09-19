@@ -1,11 +1,3 @@
-install nginx
-
-create certs
-
-modify /etc/nginx/nginx.conf
-modify /etc/nginx/conf.d/<server>.conf
-modify /etc/nginx/sites-available/default
-
 # HTTPS protokollan käyttö NGINX palvelimella
 
 Ohje kertoo miten luodaan oma SSL sertifikaatti, ja miten saadaan NodeJS palvelimeen yhteys Nginx reverse proxylla HTTPS:n kautta.
@@ -51,9 +43,6 @@ http {
     ssl_certifikate /root/certs/MyCertificate.crt;
     # ja avaimeen
     ssl_certificate_key /root/certs/MyKey.key;
-    # ohje osoitteessa https://www.linode.com/docs/guides/getting-started-with-nginx-part-3-enable-tls-for-https/ asettaa myös seuraavan kohdan:
-    ssl_ciphers EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
-    # En ole varma vaikuttaako tämä jos kohta 'ssl_prefer_server_ciphers on;' on käytössä.
 
     # varmista myös että kohta 'ssl_protocols':issa on ainakin kohdat TLSv1.1 ja TLS1.2
     # tämä tulisi olla jo tiedostossa automaattisesti
@@ -72,10 +61,14 @@ jos esimerkiksi sivuston osoite on `example.com`, luodaan tiedosto `example.com.
 
 ```conf
 server {
+        # lisää myös nämä rivit jos haluat HTTP yhteydet:
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        # nämä rivit tulee asettaa jotta https toimii
         listen 443 ssl default_server;
         listen [::]:443 ssl default_server;
         server_name <sivuston osoite>; # aseta sivuston osoite tähän
-        root /var/www/example.com; # tällä ei tulisi olla väliä, koska emme jaa staattisia tiedostoja
 
         location / {
                 proxy_pass http://localhost:3000; # laita portiksi NodeJS portti
@@ -91,7 +84,7 @@ server {
 
 4. Konfigurodaan `/etc/nginx/sites-available/default`
 
-En ole varma tuleeko seuraavia kohtia tehdä, mutta niistä on tuskin haittaa
+Jos haluat sulkea nginxin automaattiset sivut, tai käyttää http yhteyksiä, täytyy seuraava vaihe tehdä.
 
 muokkaa tiedostoa:
 
@@ -106,6 +99,8 @@ server {
 }
 
 ```
+
+Tällä tavalla varmistetaan että mikään (muu kuin oma sivu) ei käytä porttia 80.
 
 5. Käynnistä nginx uudelleen komennolla `sudo service nginx restart`
 

@@ -1,5 +1,7 @@
 // src/components/UserManagement.js
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 // UserManagement-komponentti hoitaa käyttäjien hallinnan ja CRUD-toiminnot
 function UserManagement() {
@@ -8,14 +10,28 @@ function UserManagement() {
     const [newUser, setNewUser] = useState({ username: '', bio: '' });
     const [editingUser, setEditingUser] = useState(null);
 
-// useEffect hook suorittaa koodin, kun komponentti ladataan
+// // useEffect hook suorittaa koodin, kun komponentti ladataan
+//     useEffect(() => {
+//     //     // Alustava käyttäjädata (voisi olla API-kutsu lopullisessa sovelluksessa)
+//         setUsers([
+//             // { username: 'Jouni React', bio: 'Tämä on Jounin henkilökohtainen kuvaus (bio).'}, 
+//             // { username: 'Jaana React', bio: 'Tämä on Jaanan henkilökohtainen kuvaus (bio).' }
+//         ]);
+//     }, []);
+
+//API-kutsu lista käyttäjistä
+const [User, setUser] = useState([]);
+
     useEffect(() => {
-        // Alustava käyttäjädata (voisi olla API-kutsu lopullisessa sovelluksessa)
-        setUsers([
-            { username: 'Jouni React', bio: 'Tämä on Jounin henkilökohtainen kuvaus (bio).'}, 
-            { username: 'Jaana React', bio: 'Tämä on Jaanan henkilökohtainen kuvaus (bio).' }
-        ]);
-    }, []);
+        kayttajat()
+    }, [])
+    
+    const kayttajat = async () => {
+    const response = await fetch(`http://localhost:3000/api/users`);
+
+    setUser(await response.json())
+    }
+
 
     // handleChange-funktio päivittää tilan, kun käyttäjä muuttaa lomakkeen kenttää
     const handleChange = (e) => {
@@ -84,9 +100,10 @@ Bio:
             <h2>Käyttäjäluettelo</h2>
             {/* Käyttäjälistan renderöinti */}
             <ul>
-                {users.map(user => (
-                    <li key={user.username}>
-                        {user.username}: {user.bio}
+                {User.map(user => (
+                    <li key={User.id}>
+                        {user.name}: {user.bio}
+                        <br></br>
                         {/* Edit-painike, joka mahdollistaa käyttäjän muokkaamisen */}
                         <button onClick={() => handleEdit(user)}>Muokkaa</button>
                         {/* Delete-painike, joka poistaa käyttäjän */}
