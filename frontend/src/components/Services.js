@@ -1,92 +1,22 @@
 // src/components/Sevices.js
 import React, { useState } from 'react';
-import axios from 'axios';
+import Model from 'react-modal';
+import Profile from './Profile';
 
 //Services- komponentti mahdollistaa käyttäjän omien tietojen muokkauksen sekä palveluiden käytön.
 function Services() {
+    const [catFact, setCatFact] = useState("");
 
-    // useState hook luo tilan käyttäjän tiedoille: käyttäjänimi, salasana ja bio
-    const [user, setUser] = useState({ username: '', password: '', bio: '' });
-    // handleChange-funktio päivittää tilan, kun käyttäjä muuttaa lomakkeen kenttää
-    const handleChange = (e) => {
-        // Päivitetään vastaava kenttä tilassa
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value
+    const handleClick = async () => {
+        await fetch("https://catfact.ninja/fact")
+        .then((res) => res.json())
+        .then((data) => {
+            setCatFact(data.fact);
         });
-    };
-    // handleSubmit-funktio käsittelee lomakkeen lähetyksen
-
-    const handleSubmit = (e) => {
+    } 
     
-    if (user.username && user.password && user.bio) {
-    e.preventDefault()
-    axios.post(`http://localhost:3000/api/users`, {
-    "name": user.username,
-    "password": user.password,
-    "bio": user.bio,
-    })
-    .then((response) => console.log(response.data))
-    .catch((err) => console.log(err));
-    alert('Käyttäjä rekisteröityi onnistuneesti');
-    }
-
-    else {
-        alert('Olet jättänyt kentän tyhjäksi');
-    }
-    };
-
-    <div id="theMessage">
-        
-    <h2>Rekisteröinti</h2>
-    {/* Lomakkeen lähetys kutsuu handleSubmit-funktiota */}
-   <form onSubmit={handleSubmit}>
-       <label>
-       Käyttäjänimi:
-           {/* Tekstikenttä, joka päivittää username-tilan */}
-           <input
-               type="text"
-               name="username"
-               value={user.username}
-               onChange={handleChange}
-           />
-       </label>
-       <br />
-       <label>
-           Salasana:
-           {/* Salasanojen syöttökenttä, joka päivittää password-tilan */}
-           <input
-               type="password"
-               name="password"
-               value={user.password}
-               onChange={handleChange}
-           />
-       </label>
-       <br />
-       <label>
-           Bio:
-           {/* Tekstialue, joka päivittää bio-tilan */}
-           <textarea
-               name="bio"
-               value={user.bio}
-               onChange={handleChange}
-           />
-       </label>
-       <br />
-       {/* Rekisteröinti-painike */}
-       <button type="submit">Rekisteröidy</button>
-   </form></div>
-
-    var element = document.getElementById("theMessage");
-
-    function showMsg(){
-        element.style.visibility = "visible";
-    }
-
-    function hideMsg() {
-        element.style.visibility = "hidden";
-    }
-
+    //Muuttuja määrittää profiilinhallinta lomakkeen tilan näkyväksi tai pois näkyvistä
+    const [visible, setvisible]=useState(false)
 
     return (
         <div>
@@ -96,12 +26,27 @@ function Services() {
             Täällä voit tarkastella ja muokata tietojasi.
             <br></br>
             <br></br>
-            <button onClick={showMsg}>Hallitse profiilia</button >
+            {/* Profiilin hallinta pop up lomake */}
+            <button onClick={()=>setvisible(true)}>Hallitse profiilia</button>
+            <Model isOpen={visible} onRequestClose={()=>setvisible(false)} style={{
+                content: {
+                    top: '50%',
+                    left: '25%',
+                    right: 'auto',
+                    bottom: 'auto',
+                    marginRight: '-50%',
+                    transform: 'translate(-50%, -50%)',
+                  },
+            }}>
+                <Profile/>
+                <button onClick={()=>setvisible(false)}>X</button>
+            </Model>
             <h2>Toiminnot</h2>
             Tarjoamme erilaisia toimintoja kirjautuneille käyttäjille.
             <br></br>
             <br></br>
-            <button onClick={()=>{ alert('Profiilinhallinta tulossa!'); }}>Suorita toiminto</button>
+            <button onClick={handleClick}>Suorita toiminto</button>
+            <p>{catFact}</p>
         </div>
     )
 };
