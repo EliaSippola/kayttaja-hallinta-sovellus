@@ -1,11 +1,13 @@
 // src/components/Sevices.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Model from 'react-modal';
 import Profile from './Profile';
+import { useNavigate } from 'react-router-dom';
 
 //Services- komponentti mahdollistaa käyttäjän omien tietojen muokkauksen sekä palveluiden käytön.
-function Services() {
+function Services({getUser, setUser}) {
     const [catFact, setCatFact] = useState("");
+    const navigate = useNavigate();
 
     const handleClick = async () => {
         await fetch("https://catfact.ninja/fact")
@@ -17,6 +19,12 @@ function Services() {
     
     //Muuttuja määrittää profiilinhallinta lomakkeen tilan näkyväksi tai pois näkyvistä
     const [visible, setvisible]=useState(false)
+
+    useEffect(() => {
+        if (getUser()['name'] == '') {
+            navigate('/kirjautuminen');
+        }
+    }, []);
 
     return (
         <div>
@@ -38,7 +46,7 @@ function Services() {
                     transform: 'translate(-50%, -50%)',
                   },
             }}>
-                <Profile/>
+                <Profile getUser={getUser} setUser={setUser} />
                 <button onClick={()=>setvisible(false)}>X</button>
             </Model>
             <h2>Toiminnot</h2>

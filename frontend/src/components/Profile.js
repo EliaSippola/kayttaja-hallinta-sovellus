@@ -3,24 +3,36 @@ import React, { useState, useEffect } from 'react';
 
 
 // UserManagement-komponentti hoitaa käyttäjien hallinnan ja CRUD-toiminnot
-function Profile() {
+function Profile({getUser, setUser}) {
     // useState hook luo tilan käyttäjille ja uudelle käyttäjälle
     const [newUser, setNewUser] = useState({ name: '', bio: '' , password: ''});
-    const [editingUser, setEditingUser] = useState(null);
 
-//API-kutsu lista käyttäjistä
-const [users, setUsers] = useState([]);
+    //API-kutsu lista käyttäjistä
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        kayttajat()
+        kayttajat();
     }, [])
     
     const kayttajat = async () => {
-    const response = await fetch(`http://localhost:3000/api/users`);
-
-    setUsers(await response.json())
+        const response = await fetch(`http://localhost:3000/api/users`);
+        const json = await response.json();
+        setUsers(json);
     }
 
+    const filterForLoggedUser = async () => {
+        if (users.length < 1) {
+            return;
+        }
+        const loggedUser = await getUser();
+        const filteredUsers = users.filter((a) => {return a === null ? null : a.name === loggedUser['name'];});
+
+        setNewUser(filteredUsers[0]);
+    }
+
+    useEffect(() => {
+        filterForLoggedUser();
+    }, [users]);
 
     // handleChange-funktio päivittää tilan, kun käyttäjä muuttaa lomakkeen kenttää
     const handleChange = (e) => {
@@ -29,51 +41,22 @@ const [users, setUsers] = useState([]);
             [e.target.name]: e.target.value,
         });
     };
-
-    // handleEdit-funktio asettaa käyttäjän muokkaustilaan
-    const handleEdit = (user) => {
-        setEditingUser(user);
-        setNewUser({ name: user.name, bio: user.bio , _id: user._id});
-    };
     
     // handleSubmit-funktio käsittelee lomakkeen lähetyksen
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (editingUser) {
-
-            // send request
-            fetch(`http://localhost:3000/api/users/${editingUser._id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: newUser.name,
-                    password: newUser.password,
-                    bio: newUser.bio
-                })
-            }).then((res) => {
-                if (!res.ok) {
-                    alert('Yhteys tietokantaan epäonnistui!');
-                    return
-                }
-            });
-
-            // Jos ollaan muokkaustilassa, päivitetään olemassa oleva käyttäjä 
-            setUsers(users.map(user => (user._id === editingUser._id ? newUser : user)));
-            setEditingUser(null);
-        }
-    };
-
-    // handleDelete-funktio poistaa käyttäjän listasta
-    const handleDelete = (deletedUser) => {
 
         // send request
-        fetch(`http://localhost:3000/api/users/${deletedUser._id}`, {
-            method: 'DELETE',
+        fetch(`http://localhost:3000/api/users/${newUser._id}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                name: newUser.name,
+                password: newUser.password,
+                bio: newUser.bio
+            })
         }).then((res) => {
             if (!res.ok) {
                 alert('Yhteys tietokantaan epäonnistui!');
@@ -81,8 +64,8 @@ const [users, setUsers] = useState([]);
             }
         });
 
-        setUsers(users.filter(user => user._id !== deletedUser._id));
-
+        // Jos ollaan muokkaustilassa, päivitetään olemassa oleva käyttäjä 
+        setUsers(users.map(user => (user._id === newUser._id ? newUser : user)));
     };
 
     // Komponentin renderöinti
@@ -99,6 +82,7 @@ const [users, setUsers] = useState([]);
                         name="name"
                         value={newUser.name}
                         onChange={handleChange}
+                        disabled
                     />
                 </label>
                 <br/>
@@ -124,22 +108,8 @@ Bio:
                 </label>
                 <br />
                 {/* Lomakkeen lähetyspainike, joka vaihtaa tekstinsä päivitys- tai lisäystilanteen mukaan */}
-                <button type="submit">Update User</button>
+                <button type="submit">Päivitä tietoja</button>
             </form>
-            <h2>Käyttäjäluettelo</h2>
-            {/* Käyttäjälistan renderöinti */}
-            <ul>
-                {users.map(user => (
-                    <li key={user._id}>
-                        {user.name}: {user.bio}
-                        <br></br>
-                        {/* Edit-painike, joka mahdollistaa käyttäjän muokkaamisen */}
-                        <button onClick={() => handleEdit(user)}>Muokkaa</button>
-                        {/* Delete-painike, joka poistaa käyttäjän */}
-                        <button onClick={() => handleDelete(user)}>Poista</button>
-                    </li>
-                ))}
-            </ul>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 // src/App.js
-import React from 'react';
+import React, { useState } from 'react';
 //import { BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'; Switchiä ei voi käyttää, koska se on vanhentunut. Sen sijaan käytetään Routesia.
 import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
 
@@ -12,6 +12,17 @@ import './App.css';
 
 // App-komponentti on sovelluksen pääkomponentti
 function App() {
+
+    const [user, sUser] = useState({ name: '', password: ''});
+
+    function getUser() {
+        return user;
+    }
+
+    function setUser(dict) {
+        sUser(dict);
+    }
+
     return (
         <Router>
             <div className="App">
@@ -43,9 +54,9 @@ function App() {
                         </div>
                     } />
                     <Route path="/rekisteröinti" element={<Register />} />
-                    <Route path="/kirjautuminen" element={<Login />} />
-                    <Route path="/käyttäjät" element={<UserManagement />} />
-                    <Route path="/palvelut" element={<Services />} />
+                    <Route path="/kirjautuminen" element={<Login getUser={getUser} setUser={setUser} />} />
+                    <Route path="/käyttäjät" element={<UserManagement getUser={getUser} setUser={setUser} />} />
+                    <Route path="/palvelut" element={<Services getUser={getUser} setUser={setUser} />} />
                 </Routes>
             </div>
         </Router>

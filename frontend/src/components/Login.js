@@ -1,10 +1,10 @@
 // src/components/Register.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import user from '../../../backend/models/user';
 
 // Login-komponentti käsittelee käyttäjän kirjautumisen
-function Login() {
+function Login({ getUser, setUser }) {
     // useState hook luo tilan kirjautumistiedoille: käyttäjänimi ja salasana
     const [credentials, setCredentials] = useState({ username: '', password: ''});
     const [error, setError] = useState(null);
@@ -32,6 +32,7 @@ function Login() {
                 body: JSON.stringify(credentials)
             });
             if (response.ok) {
+                setUser({'name': credentials.username, 'password': credentials.password});
                 // Jos kirjautuminen onnistui, ohjataan palvelut sivulle
                 navigate('/palvelut');
             } else {
@@ -41,7 +42,13 @@ function Login() {
         // } catch (err) {
         //     setError(err.message);
         // }
-};
+    };
+
+    useEffect(() => {
+        if (getUser()['name'] != '') {
+            navigate('/palvelut');
+        }
+    }, []);
 
     // Lomakkeen renderöinti
     return (
