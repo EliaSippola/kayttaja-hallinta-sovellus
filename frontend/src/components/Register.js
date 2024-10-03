@@ -47,7 +47,7 @@ function Register() {
                         "password": user.password,
                         "bio": user.bio,
                         })
-                        .then((response) => console.log(response.data))
+                        .then()
                         .catch((err) => console.log(err));
                         alert('Käyttäjä rekisteröityi onnistuneesti');
                 }

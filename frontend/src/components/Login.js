@@ -31,7 +31,6 @@ function Login() {
                 },
                 body: JSON.stringify(credentials)
             });
-            console.log(response);
             if (response.ok) {
                 // Jos kirjautuminen onnistui, ohjataan palvelut sivulle
                 navigate('/palvelut');

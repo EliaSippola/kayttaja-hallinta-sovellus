@@ -105,7 +105,7 @@ const [users, setUsers] = useState([]);
                                         password: newUser.password,
                                         bio: newUser.bio
                                     })})
-                                    .then((response) => console.log(response.data))
+                                    .then()
                                     .catch((err) => console.log(err));
 
                                 alert('Käyttäjä rekisteröityi onnistuneesti');
