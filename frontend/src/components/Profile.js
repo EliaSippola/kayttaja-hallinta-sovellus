@@ -3,31 +3,24 @@ import React, { useState, useEffect } from 'react';
 
 
 // UserManagement-komponentti hoitaa käyttäjien hallinnan ja CRUD-toiminnot
-function UserManagement() {
+function Profile() {
     // useState hook luo tilan käyttäjille ja uudelle käyttäjälle
     const [newUser, setNewUser] = useState({ name: '', bio: '' , password: ''});
     const [editingUser, setEditingUser] = useState(null);
 
-
 //API-kutsu lista käyttäjistä
 const [users, setUsers] = useState([]);
 
+    useEffect(() => {
+        kayttajat()
+    }, [])
+    
     const kayttajat = async () => {
-        const response = await fetch(`http://localhost:3000/api/users`);
+    const response = await fetch(`http://localhost:3000/api/users`);
 
     setUsers(await response.json())
     }
 
-    useEffect(() => {
-        kayttajat();
-    }, []);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            kayttajat();
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [])
 
     // handleChange-funktio päivittää tilan, kun käyttäjä muuttaa lomakkeen kenttää
     const handleChange = (e) => {
@@ -69,58 +62,7 @@ const [users, setUsers] = useState([]);
             // Jos ollaan muokkaustilassa, päivitetään olemassa oleva käyttäjä 
             setUsers(users.map(user => (user._id === editingUser._id ? newUser : user)));
             setEditingUser(null);
-
-        } else {
-
-            if (newUser.name && newUser.password && newUser.bio) {
-                e.preventDefault()
-            
-                    // create api request to check if username exists
-                    fetch('http://localhost:3000/api/users/exists', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            "username": newUser.name
-                        })
-                    // then check if response is 200, and get response body
-                    }).then((res) => {
-                        if (!res.ok) {
-                            alert('Issue with server connection');
-                            return;
-                        }
-                        // check if name exists, if not, create account
-                        res.json().then((res) => {
-                            if (res.exists) {
-                                alert('Nimi on jo käytössä');
-                            } else {
-                                fetch(`http://localhost:3000/api/users`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        name: newUser.name,
-                                        password: newUser.password,
-                                        bio: newUser.bio
-                                    })})
-                                    .then((response) => console.log(response.data))
-                                    .catch((err) => console.log(err));
-
-                                alert('Käyttäjä rekisteröityi onnistuneesti');
-                                // Muussa tapauksessa lisätään uusi käyttäjä
-                                setUsers([...users, newUser]);
-                            }
-                        })
-                    });
-
-                } else {
-                    alert('Olet jättänyt kentän tyhjäksi');
-                }
         }
-        // Tyhjennetään lomake
-        setNewUser({ name: '', bio: '' , password: ''});
     };
 
     // handleDelete-funktio poistaa käyttäjän listasta
@@ -157,7 +99,6 @@ const [users, setUsers] = useState([]);
                         name="name"
                         value={newUser.name}
                         onChange={handleChange}
-                        disabled={!!editingUser}
                     />
                 </label>
                 <br/>
@@ -169,7 +110,6 @@ const [users, setUsers] = useState([]);
                         name="password"
                         value={newUser.password}
                         onChange={handleChange}
-                        disabled={!!editingUser}
                     />
                 </label>
                 <br/>
@@ -184,7 +124,7 @@ Bio:
                 </label>
                 <br />
                 {/* Lomakkeen lähetyspainike, joka vaihtaa tekstinsä päivitys- tai lisäystilanteen mukaan */}
-                <button type="submit">{editingUser ? 'Update User' : 'Lisää Käyttäjä'}</button>
+                <button type="submit">Update User</button>
             </form>
             <h2>Käyttäjäluettelo</h2>
             {/* Käyttäjälistan renderöinti */}
@@ -204,4 +144,4 @@ Bio:
     );
 }
 
-export default UserManagement;
+export default Profile;
