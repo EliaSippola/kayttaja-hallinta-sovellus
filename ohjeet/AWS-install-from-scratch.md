@@ -1,4 +1,4 @@
-### AWS Elastic beanstalk install from scratch
+### AWS ec2 instance install from scratch
 
 Launching the app to ec2 Debian / Ubuntu instance
 

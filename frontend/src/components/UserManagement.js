@@ -8,28 +8,26 @@ function UserManagement() {
     const [newUser, setNewUser] = useState({ name: '', bio: '' , password: ''});
     const [editingUser, setEditingUser] = useState(null);
 
-// // useEffect hook suorittaa koodin, kun komponentti ladataan
-//     useEffect(() => {
-//     //     // Alustava käyttäjädata (voisi olla API-kutsu lopullisessa sovelluksessa)
-//         setUsers([
-//             // { username: 'Jouni React', bio: 'Tämä on Jounin henkilökohtainen kuvaus (bio).'}, 
-//             // { username: 'Jaana React', bio: 'Tämä on Jaanan henkilökohtainen kuvaus (bio).' }
-//         ]);
-//     }, []);
 
 //API-kutsu lista käyttäjistä
 const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        kayttajat()
-    }, [])
-    
     const kayttajat = async () => {
-    const response = await fetch(`http://localhost:3000/api/users`);
+        const response = await fetch(`http://localhost:3000/api/users`);
 
     setUsers(await response.json())
     }
 
+    useEffect(() => {
+        kayttajat();
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            kayttajat();
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [])
 
     // handleChange-funktio päivittää tilan, kun käyttäjä muuttaa lomakkeen kenttää
     const handleChange = (e) => {
